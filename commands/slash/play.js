@@ -13,9 +13,26 @@ const command = new SlashCommand()
       .setRequired(true)
   )
   .setRun(async (client, interaction, options) => {
+    // Check if the current server ID is in the enabledServers array in config.js
     let channel = await client.getChannel(client, interaction);
     if (!channel) {
       return;
+    }
+
+    const guildID = interaction.guild.id;
+    if (
+      client.config.enabledServers &&
+      !client.config.enabledServers.includes(guildID)
+    ) {
+      return interaction.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor("Red")
+            .setDescription(
+              "No se permite usar el bot en este servidor. Bot exclusivo de [Ecuawol](https://ecuawol.xyz/)"
+            ),
+        ],
+      });
     }
 
     let player;

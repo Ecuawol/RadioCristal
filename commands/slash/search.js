@@ -21,6 +21,22 @@ const command = new SlashCommand()
       return;
     }
 
+    const guildID = interaction.guild.id;
+    if (
+      client.config.enabledServers &&
+      !client.config.enabledServers.includes(guildID)
+    ) {
+      return interaction.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor("Red")
+            .setDescription(
+              "No se permite usar el bot en este servidor. Bot exclusivo de [Ecuawol](https://ecuawol.xyz/)"
+            ),
+        ],
+      });
+    }
+
     let player;
     if (client.manager) {
       player = client.createPlayer(interaction.channel, channel);
